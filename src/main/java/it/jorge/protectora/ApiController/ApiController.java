@@ -17,10 +17,10 @@ import it.jorge.protectora.Service.AdoptionService;
 import it.jorge.protectora.Service.PetsService;
 import it.jorge.protectora.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -48,13 +48,17 @@ public class ApiController {
             @ApiResponse(responseCode = "404", description = "El usuario no exite con ese nombre o contraseña", content = @Content(schema = @Schema(implementation = Usuario.class)))
     })
     @PostMapping("/users/login")
-    public ResponseEntity<JWT> hashLogin (@RequestParam("user") String user, @RequestParam("pass") String pass){
+    public ResponseEntity<?> hashLogin (@RequestBody Usuario user){
 
-        Usuario login = serviceUser.hashlogin(user);
-        if (passwordEncoder.matches(pass, login.getPass())){
-            return ResponseEntity.ok(new JWT(getJWTToken(login)));
+        Usuario login = serviceUser.hashlogin(user.getEmail());
+        if(login != null){
+            if (passwordEncoder.matches(user.getPass(), login.getPass())){
+                return ResponseEntity.ok(new JWT(getJWTToken(login)));
+            }
+
         }
-        return null;
+
+        return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 
     }
     @Operation(summary = "Obtiene todos los animales")
