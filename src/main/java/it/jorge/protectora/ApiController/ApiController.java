@@ -46,7 +46,7 @@ public class ApiController {
             @ApiResponse(responseCode = "200", description = "Comprueba que el usuario esta dado de alta en la dase de datos", content = @Content(schema = @Schema(implementation = Usuario.class))),
             @ApiResponse(responseCode = "404", description = "El usuario no exite con ese nombre o contraseña", content = @Content(schema = @Schema(implementation = Usuario.class)))
     })
-    @PostMapping("/users/login")
+    @PostMapping("/login")
     public ResponseEntity<JWT> hashLogin (@RequestParam("user") String user, @RequestParam("pass") String pass){
 
         Usuario login = serviceUser.hashlogin(user);
@@ -61,43 +61,11 @@ public class ApiController {
             @ApiResponse(responseCode = "200", description = "Comprueba que hay animales en la dase de datos", content = @Content(schema = @Schema(implementation = Mascota.class))),
             @ApiResponse(responseCode = "404", description = "No hay animales en la base de datos", content = @Content(schema = @Schema(implementation = Mascota.class)))
     })
-    @GetMapping("/pets")
-    public List<Mascota> findAll (){
-        return service.findAll();
-    }
+
     @GetMapping("/pets/{id}")
     public Mascota findByIdPets (@PathVariable int id){
         return service.findById(id).get();
     }
-    @Operation(summary = "Inserta animales")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Insertado correctamente", content = @Content(schema = @Schema(implementation = Mascota.class))),
-            @ApiResponse(responseCode = "404", description = "Error al insertar", content = @Content(schema = @Schema(implementation = Mascota.class)))
-    })
-    @PostMapping("/pets")
-    public Mascota insertPet(@RequestBody Mascota pet){
-        return service.save(pet);
-    }
-    @Operation(summary = "Modifica animales")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Modificado correctamente", content = @Content(schema = @Schema(implementation = Mascota.class))),
-            @ApiResponse(responseCode = "404", description = "Error al Modificar", content = @Content(schema = @Schema(implementation = Mascota.class)))
-    })
-    @PutMapping("/pets")
-    public Mascota updatePet(@RequestBody Mascota pet){
-        return service.save(pet);
-    }
-    @Operation(summary = "Eliminar animales")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Eres un monstruo", content = @Content(schema = @Schema(implementation = Mascota.class))),
-            @ApiResponse(responseCode = "404", description = "Menos mal", content = @Content(schema = @Schema(implementation = Mascota.class)))
-    })
-
-    @DeleteMapping("/pets/{id}")
-    public void deletePet(@PathVariable int id){
-        service.delete(service.findById(id).get());
-    }
-
     @Operation(summary = "Obtiene un usuario por el token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Existe el usuario", content = @Content(schema = @Schema(implementation = Usuario.class))),
@@ -113,7 +81,7 @@ public class ApiController {
             @ApiResponse(responseCode = "200", description = "Insertar correctamente", content = @Content(schema = @Schema(implementation = Usuario.class))),
             @ApiResponse(responseCode = "404", description = "Error al Insertar", content = @Content(schema = @Schema(implementation = Usuario.class)))
     })
-    @PostMapping("/users")
+    @PostMapping("/adduser")
     public Usuario insertUser(@RequestBody Usuario user){
 
         String pass = user.getPass();
@@ -157,7 +125,7 @@ public class ApiController {
         Usuario user = serviceUser.findById((Integer) claims.get("id")).get();
         return user.getPets();
     }
-    @GetMapping("/pets/adoption")
+    @GetMapping("/pets")
     public List<Mascota> getPets(){
         return service.getPets();
     }
