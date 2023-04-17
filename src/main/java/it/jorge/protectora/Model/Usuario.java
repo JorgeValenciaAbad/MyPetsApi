@@ -33,7 +33,10 @@ public class Usuario {
     @Column(name = "rol")
     private int rol;
 
-
+    public Usuario(String email , String pass ){
+        this.email = email;
+        this.pass = pass;
+    }
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
