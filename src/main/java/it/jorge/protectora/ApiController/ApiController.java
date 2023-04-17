@@ -55,9 +55,7 @@ public class ApiController {
             if (passwordEncoder.matches(user.getPass(), login.getPass())){
                 return ResponseEntity.ok(new JWT(getJWTToken(login)));
             }
-
         }
-
         return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 
     }
