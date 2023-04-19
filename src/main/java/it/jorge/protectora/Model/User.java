@@ -10,16 +10,16 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "Users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private int user_id;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "name")
     private String name;
@@ -30,19 +30,19 @@ public class Usuario {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "rol")
-    private int rol;
+    @Column(name = "phone")
+    private String phone;
 
-    public Usuario(String email , String pass ){
+    public User(String email , String pass ){
         this.email = email;
         this.pass = pass;
     }
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "adopcion",
+            name = "Adoption",
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="pet_id"))
     @JsonIgnore
-    private List<Mascota> pets;
+    private List<Pet> pets;
 }

@@ -10,35 +10,39 @@ import java.util.List;
 
 
 @Entity
-@Table(name="mascota")
+@Table(name="Pets")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mascota {
+public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="pet_id")
+    @Column(name="id")
     private int pet_id;
 
     @Column(name="name")
     private String name;
 
-    @Column(name="tipo")
+    @Column(name="type")
     private String type;
 
     @Column(name="age")
     private int age;
 
-    @Column(name="categoria")
-    private int category;
+    @Column(name="breed")
+    private String breed;
 
-    @Column(name="sumary")
-    private String description;
+    @Column(name="location")
+    private String location;
 
-    @Column(name="reserva")
-    private boolean reserva;
+    @Column(name="summary")
+    private String summary;
+
+    @Column(name="adoption")
+    private boolean adoption;
+
     @ManyToMany(mappedBy = "pets", fetch= FetchType.LAZY)
     @JsonManagedReference
-    private List<Usuario> users;
+    private List<User> users;
 }

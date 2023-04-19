@@ -1,9 +1,9 @@
 package it.jorge.protectora.Service;
 
-import it.jorge.protectora.DAO.MascotaDAO;
+import it.jorge.protectora.DAO.PetDAO;
 
 
-public interface PetsService extends MascotaDAO{
+public interface PetsService extends PetDAO {
 
 
 }
