@@ -13,7 +13,6 @@ import it.jorge.protectora.Model.Adopcion;
 import it.jorge.protectora.Model.JWT;
 import it.jorge.protectora.Model.Mascota;
 import it.jorge.protectora.Model.Usuario;
-import it.jorge.protectora.Service.AdoptionService;
 import it.jorge.protectora.Service.PetsService;
 import it.jorge.protectora.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,7 @@ public class ApiController {
     @Autowired
     UserService serviceUser;
 
-    @Autowired
-    AdoptionService adoptionService;
+
     @Operation(summary = "Log In de un usuario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comprueba que el usuario esta dado de alta en la dase de datos", content = @Content(schema = @Schema(implementation = Usuario.class))),
@@ -112,11 +110,30 @@ public class ApiController {
             @ApiResponse(responseCode = "404", description = "Error a reservar", content = @Content(schema = @Schema(implementation = Mascota.class)))
     })
     @PostMapping("adoption")
-    public Adopcion insertAdoption(@RequestBody Adopcion adopcion){
-        Mascota pet = service.findById(adopcion.getPet_id()).get();
-        pet.setReserva(true);
-        service.save(pet);
-        return adoptionService.save(adopcion);
+    public boolean insertAdoption(@RequestBody Adopcion adopcion){
+
+        try{
+
+            Mascota pet = service.findById(adopcion.getPet_id()).get();
+            pet.setReserva(true);
+            Usuario user = serviceUser.findById(adopcion.getUser_id()).get();
+            List<Mascota>pets = user.getPets();
+            pets.add(pet);
+            user.setPets(pets);
+            serviceUser.save(user);
+            List<Usuario> users = pet.getUsers();
+            users.add(user);
+            pet.setUsers(users);
+            service.save(pet);
+            serviceUser.save(user);
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+
     }
     @PostMapping("/user/pets")
     public List<Mascota> getUserPets(@RequestHeader("Authorization") JWT jwt){
