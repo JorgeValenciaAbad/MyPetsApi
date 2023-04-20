@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @SpringBootApplication
-public class ProtectoraApplication {
+public class ProtectorApplication {
 
 	private static final String[] AUTH_WHITE_LIST = {
 			"/v3/api-docs/**",
@@ -20,7 +20,7 @@ public class ProtectoraApplication {
 			"/swagger-resources/**"
 	};
 	public static void main(String[] args) {
-		SpringApplication.run(ProtectoraApplication.class, args);
+		SpringApplication.run(ProtectorApplication.class, args);
 
 	}
 	@EnableWebSecurity

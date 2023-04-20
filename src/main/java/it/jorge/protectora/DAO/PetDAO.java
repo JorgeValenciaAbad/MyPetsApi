@@ -9,9 +9,10 @@ import java.util.List;
 public interface PetDAO extends JpaRepository<Pet, Integer>{
 
     @Query("SELECT m FROM Pet m WHERE m.adoption = false")
-    public List<Pet> getPets ();
+    List<Pet> getPets ();
     @Query("Select m.type from Pet m group by m.type")
-    public List<String> getPetType();
+    List<String> getPetType();
 
-
+    @Query("Select m from Pet m where m.type = ?1")
+    List<Pet> getPetsType(String type);
 }

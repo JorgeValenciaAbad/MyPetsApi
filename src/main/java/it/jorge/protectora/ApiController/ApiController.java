@@ -13,6 +13,7 @@ import it.jorge.protectora.Model.Pet;
 import it.jorge.protectora.Model.User;
 import it.jorge.protectora.Service.PetsService;
 import it.jorge.protectora.Service.UserService;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -162,6 +163,16 @@ public class ApiController {
     @GetMapping("pets/types")
     public List<String> getTypes(){
        return service.getPetType();
+    }
+
+    @GetMapping("pet/{type}")
+    public ResponseEntity<?> getPetsType(@PathVariable("type") String type){
+        try{
+            return  ResponseEntity.ok(service.getPetsType(type));
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity("Conflict", HttpStatus.CONFLICT);
+        }
     }
 
     private String getJWTToken(User user) {
