@@ -19,7 +19,7 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int pet_id;
+    private int id;
 
     @Column(name="name")
     private String name;
@@ -33,6 +33,15 @@ public class Pet {
     @Column(name="breed")
     private String breed;
 
+    @Column(name="sex")
+    private String sex;
+
+    @Column(name="size")
+    private String size;
+
+    @Column(name = "weight")
+    private double weight;
+
     @Column(name="location")
     private String location;
 
@@ -41,6 +50,15 @@ public class Pet {
 
     @Column(name="adoption")
     private boolean adoption;
+
+    @Column(name="cats")
+    private boolean cats;
+
+    @Column(name="dogs")
+    private boolean dogs;
+
+    @Column(name="humans")
+    private boolean humans;
 
     @ManyToMany(mappedBy = "pets", fetch= FetchType.LAZY)
     @JsonManagedReference

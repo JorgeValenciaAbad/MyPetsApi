@@ -1,4 +1,4 @@
-package it.jorge.protectora.ApiController;
+package it.jorge.protectora.Controller;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +13,6 @@ import it.jorge.protectora.Model.Pet;
 import it.jorge.protectora.Model.User;
 import it.jorge.protectora.Service.PetsService;
 import it.jorge.protectora.Service.UserService;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.Location;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -165,10 +165,20 @@ public class ApiController {
        return service.getPetType();
     }
 
-    @GetMapping("pet/{type}")
+    @GetMapping("pets/type/{type}")
     public ResponseEntity<?> getPetsType(@PathVariable("type") String type){
         try{
             return  ResponseEntity.ok(service.getPetsType(type));
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity("Conflict", HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("pets/location/{location}")
+    public ResponseEntity<?> getPetsLocation(@PathVariable("location") String location){
+        try{
+            return  ResponseEntity.ok(service.getPetsLocation(location));
         }catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity("Conflict", HttpStatus.CONFLICT);

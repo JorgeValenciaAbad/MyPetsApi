@@ -38,6 +38,12 @@ public class User {
         this.pass = pass;
     }
 
+    public User(String name , String pass, String email ){
+        this.name = name;
+        this.email = email;
+        this.pass = pass;
+    }
+
     @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "Adoption",
