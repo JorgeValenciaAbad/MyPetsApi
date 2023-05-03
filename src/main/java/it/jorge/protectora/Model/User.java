@@ -33,6 +33,17 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "summary")
+    private String summary;
+
+    @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Adoption",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="pet_id"))
+    @JsonIgnore
+    private List<Pet> pets;
+
     public User(String email , String pass ){
         this.email = email;
         this.pass = pass;
@@ -43,12 +54,4 @@ public class User {
         this.email = email;
         this.pass = pass;
     }
-
-    @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "Adoption",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="pet_id"))
-    @JsonIgnore
-    private List<Pet> pets;
 }

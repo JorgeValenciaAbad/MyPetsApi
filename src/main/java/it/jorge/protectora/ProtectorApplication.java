@@ -32,8 +32,8 @@ public class ProtectorApplication {
 			http.csrf().disable()
 					.addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/api/login").permitAll()
-					.antMatchers(HttpMethod.POST, "/api/adduser").permitAll()
+					.antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
+					.antMatchers(HttpMethod.POST, "/api/user/adduser").permitAll()
 					.antMatchers(AUTH_WHITE_LIST).permitAll()
 					.anyRequest().authenticated();
 		}
