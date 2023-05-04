@@ -33,8 +33,8 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "summary")
-    private String summary;
+    @Column(name = "image")
+    private String image;
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

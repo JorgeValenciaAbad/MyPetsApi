@@ -37,7 +37,7 @@ public class CommonController {
             @ApiResponse(responseCode = "404", description = "Error to adoption", content = @Content(schema = @Schema(implementation = Pet.class)))
     })
 
-    @PostMapping("adoption")
+    @PostMapping("demand")
     public ResponseEntity<?> insertAdoption(@RequestHeader("Authorization") String token, @RequestParam("id") int petId) {
 
         try {
@@ -49,7 +49,7 @@ public class CommonController {
 
                 return new ResponseEntity(1, HttpStatus.CONFLICT);
 
-            } else if (user.getPhone().isEmpty() || user.getSummary().isEmpty()) {
+            } else if (user.getPhone().isEmpty()) {
 
                 return new ResponseEntity(2, HttpStatus.CONFLICT);
 

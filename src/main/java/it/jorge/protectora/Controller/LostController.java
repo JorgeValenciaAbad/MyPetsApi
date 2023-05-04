@@ -32,10 +32,11 @@ public class LostController {
         }
     }
     @PostMapping
-    public ResponseEntity<?> addComplaint(@RequestParam("image")MultipartFile image, @RequestParam("summary") String summary){
+    public ResponseEntity<?> addComplaint(@RequestPart("image")MultipartFile image, @RequestParam("summary") String summary){
         try{
             Files.write(Paths.get(route+"//"+image.getOriginalFilename()),image.getBytes());
-            return ResponseEntity.ok(lostService.save(new LostAnimal(summary,image.getOriginalFilename())));
+            lostService.save(new LostAnimal(summary,image.getOriginalFilename()));
+            return ResponseEntity.ok(200);
         }catch (Exception e){
             return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
         }
