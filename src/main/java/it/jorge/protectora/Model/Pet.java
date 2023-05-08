@@ -60,6 +60,9 @@ public class Pet {
     @Column(name="humans")
     private boolean humans;
 
+    @Column(name = "image")
+    private String image;
+
     @ManyToMany(mappedBy = "pets", fetch= FetchType.LAZY)
     @JsonManagedReference
     private List<User> users;

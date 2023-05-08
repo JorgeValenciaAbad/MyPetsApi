@@ -34,7 +34,7 @@ public class User {
     private String phone;
 
     @Column(name = "image")
-    private String image;
+    private String image = "default.png";
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

@@ -12,12 +12,19 @@ import it.jorge.protectora.Model.User;
 import it.jorge.protectora.Service.PetService;
 import it.jorge.protectora.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import static it.jorge.protectora.util.Constants.route;
 import static it.jorge.protectora.util.Functions.getClaims;
 
 @RestController
@@ -83,4 +90,21 @@ public class CommonController {
         return user.getPets();
     }
 
+    @GetMapping("image/{img}")
+    public ResponseEntity<?> getImage (@PathVariable String img){
+        if(img!= null && !img.isEmpty()){
+            try {
+                Path file = Paths.get(route+ "\\" + img);
+                byte[] buffer = Files.readAllBytes(file);
+                ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);
+                return  ResponseEntity.ok()
+                        .contentLength(buffer.length)
+                        .contentType(MediaType.parseMediaType("image/png"))
+                        .body(byteArrayResource);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.jorge.protectora.Model.LostAnimal;
 import it.jorge.protectora.Model.User;
 import it.jorge.protectora.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static it.jorge.protectora.util.Constants.route;
 import static it.jorge.protectora.util.Functions.*;
 
 @RestController
@@ -78,6 +84,20 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Remove user from database", content = @Content(schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "409", description = "Error remove user from database")
     })
+
+    @PutMapping("image")
+    public ResponseEntity<?> updateAvatar(@RequestHeader("Authorization") String jwt, @RequestPart("image") MultipartFile image){
+
+        try{
+            User user = getUser(jwt);
+            Files.write(Paths.get(route+"//"+image.getOriginalFilename()),image.getBytes());
+            user.setImage(image.getOriginalFilename());
+            userService.save(user);
+            return ResponseEntity.ok(200);
+        }catch (Exception e){
+            return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
+        }
+    }
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id){
         userService.delete(userService.findById(id).get());
