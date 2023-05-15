@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static it.jorge.protectora.util.Functions.getClaims;
 
 @RestController
 @Tag(name = "Pet Controller")
@@ -61,7 +60,7 @@ public class PetController {
             return  ResponseEntity.ok(petService.getPetsType(type));
         }catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity("Conflict", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
     }
 }

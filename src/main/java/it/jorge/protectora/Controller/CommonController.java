@@ -56,24 +56,24 @@ public class CommonController {
 
             if (pet.isAdoption()) {
 
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse("No accept request", 1));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR1);
 
             }
             if (user.getPhone().isEmpty()) {
 
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse("Phone is incorrect", 2));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR2);
 
             }
 
             if (!validateDniNie(request.getIdentification())){
 
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse("Identification is incorrect", 3));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR3);
 
             }
 
             if (!validateDate(request.getBornDate())){
 
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse( "Born Date is incorrect", 4));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR4);
 
 
             }
@@ -91,11 +91,11 @@ public class CommonController {
             InformGenerate(request, pet);
             petService.save(pet);
             userService.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse("Successful", 0));
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse( "Error Message", 5));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
 
 

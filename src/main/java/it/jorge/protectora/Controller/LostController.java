@@ -28,7 +28,7 @@ public class LostController {
         try{
             return ResponseEntity.ok(lostService.findAll());
         }catch (Exception e){
-            return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
     }
     @PostMapping
@@ -36,18 +36,18 @@ public class LostController {
         try{
             Files.write(Paths.get(route+"//"+image.getOriginalFilename()),image.getBytes());
             lostService.save(new LostAnimal(summary,image.getOriginalFilename()));
-            return ResponseEntity.ok(200);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
         }catch (Exception e){
-            return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteComplaint(@PathVariable("id") int id){
         try{
             lostService.deleteById(id);
-            return ResponseEntity.ok("DELETE COMPLAINT");
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
         }catch(Exception e){
-            return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
     }
 

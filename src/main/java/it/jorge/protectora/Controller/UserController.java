@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.jorge.protectora.Model.BaseResponse;
 import it.jorge.protectora.Model.LostAnimal;
 import it.jorge.protectora.Model.User;
 import it.jorge.protectora.Service.UserService;
@@ -45,7 +46,7 @@ public class UserController {
                 return ResponseEntity.ok(getJWTToken(login));
             }
         }
-        return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity("Unauthorized", HttpStatus.UNAUTHORIZED);
 
     }
     @Operation(summary = "Get user")
@@ -64,11 +65,20 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "Error when add from data base ", content = @Content(schema = @Schema(implementation = User.class)))
     })
     @PostMapping("/register")
-    public User insertUser(@RequestBody User user){
+    public ResponseEntity<?> insertUser(@RequestBody User user){
 
-        String pass = user.getPass();
-        user.setPass(encodePass(pass));
-        return userService.save(user);
+        try{
+            String pass = user.getPass();
+            user.setPass(encodePass(pass));
+            user.setImage("default.png");
+            user.setDelete(false);
+            userService.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
+        }
+
+
     }
     @Operation(summary = "Update user")
     @ApiResponses(value = {
@@ -76,8 +86,13 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "Error when modifies user from data base", content = @Content(schema = @Schema(implementation = User.class)))
     })
     @PutMapping
-    public User updateUser(@RequestBody User user){
-        return userService.save(user);
+    public ResponseEntity<BaseResponse> updateUser(@RequestBody User user){
+        try{
+            userService.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
+        }
     }
     @Operation(summary = "Delete User")
     @ApiResponses(value = {
@@ -93,14 +108,22 @@ public class UserController {
             Files.write(Paths.get(route+"//"+image.getOriginalFilename()),image.getBytes());
             user.setImage(image.getOriginalFilename());
             userService.save(user);
-            return ResponseEntity.ok(200);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
         }catch (Exception e){
-            return new ResponseEntity("CONFLICT", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
         }
     }
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id){
-        userService.delete(userService.findById(id).get());
+    public ResponseEntity<?> deleteUser(@PathVariable int id){
+
+        try{
+            User user = userService.findById(id).get();
+            user.setDelete(true);
+            userService.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseController.ERROR5);
+        }
     }
 
 }

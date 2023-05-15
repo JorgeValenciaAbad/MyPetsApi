@@ -33,7 +33,7 @@ public class ProtectorApplication {
 					.addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
-					.antMatchers(HttpMethod.POST, "/api/user/adduser").permitAll()
+					.antMatchers(HttpMethod.POST, "/api/user/register").permitAll()
 					.antMatchers(HttpMethod.GET, "/api/image/{img}").permitAll()
 					.antMatchers(AUTH_WHITE_LIST).permitAll()
 					.anyRequest().authenticated();
