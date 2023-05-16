@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DemandKey implements Serializable {
+public class PetitionKey implements Serializable {
 
     @Column(name = "user_id")
     private int userId;

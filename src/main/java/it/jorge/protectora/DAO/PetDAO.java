@@ -14,6 +14,4 @@ public interface PetDAO extends JpaRepository<Pet, Integer>{
     List<String> getPetType();
     @Query("Select m from Pet m where m.type = ?1")
     List<Pet> getPetsType(String type);
-    @Query("Select m from Pet m where m.location = ?1")
-    List<Pet> getPetsLocation(String type);
 }

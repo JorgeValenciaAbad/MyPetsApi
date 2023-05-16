@@ -7,11 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.jorge.protectora.Model.BaseResponse;
-import it.jorge.protectora.Model.Pet;
-import it.jorge.protectora.Model.RequestAdoption;
-import it.jorge.protectora.Model.User;
+import it.jorge.protectora.Model.*;
 import it.jorge.protectora.Service.PetService;
+import it.jorge.protectora.Service.PetitionService;
 import it.jorge.protectora.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -38,6 +36,9 @@ public class CommonController {
     UserService userService;
     @Autowired
     PetService petService;
+
+    @Autowired
+    PetitionService petitionService;
 
 
     @Operation(summary = "Pet Adoption")
@@ -88,10 +89,12 @@ public class CommonController {
             pet.setUsers(users);
             request.setEmail(user.getEmail());
             request.setPhone(user.getPhone());
-            InformGenerate(request, pet);
-            petService.save(pet);
-            userService.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
+//            Boolean flag = petitionService.Petition(user, pet);
+//            if(flag){
+                InformGenerate(request, pet);
+                return ResponseEntity.status(HttpStatus.OK).body(ResponseController.Ok);
+//            }
+//            return ResponseEntity.status(HttpStatus.OK).body(ResponseController.ERROR5);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,13 +102,6 @@ public class CommonController {
         }
 
 
-    }
-    @PostMapping("/user/pets")
-    public List<Pet> getUserPets(@RequestHeader("Authorization") String jwt) {
-        System.out.printf(jwt);
-        Claims claims = getClaims(jwt);
-        User user = userService.findById((Integer) claims.get("id")).get();
-        return user.getPets();
     }
 
     @GetMapping("image/{img}")
@@ -124,5 +120,18 @@ public class CommonController {
             }
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/valid/{id}")
+    public ResponseEntity<?> validRequest(@RequestHeader("Authorization") String token, @PathVariable("id") int idPet){
+        try{
+            Claims claims = getClaims(token);
+            Pet pet = petService.findById(idPet).get();
+            User user = userService.findById((Integer) claims.get("id")).get();
+            Petition petition = petitionService.findById(new PetitionKey(user.getId(), pet.getId())).get();
+            return  ResponseEntity.status(HttpStatus.OK).body(petition != null);
+        }catch (Exception e){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
     }
 }

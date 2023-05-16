@@ -11,10 +11,9 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Demand {
-
+public class Petition {
     @EmbeddedId
-    private DemandKey id;
+   private PetitionKey id;
 
     @ManyToOne
     @MapsId("userId")
@@ -27,5 +26,6 @@ public class Demand {
     private Pet pet;
 
     @Column(name = "Accept")
-    private boolean accept = false;
+    private boolean accept;
 }
+
