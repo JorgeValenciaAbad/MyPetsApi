@@ -12,21 +12,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public interface PetitionService extends PetitionRepository{
 
-//    @Autowired
-//    PetitionRepository petitionRepository;
-
-//    public boolean valid (User user, Pet pet){
-//        Petition petition = petitionRepository.validPetition(user, pet);
-//        return  petition != null;
-//    }
-//
-//    @Transactional
-//    public boolean Petition(User user, Pet pet){
-//        Petition petition = petitionRepository.validPetition(user, pet);
-//        if (petition != null){
-//            petitionRepository.save(new Petition(new PetitionKey(user.getId(),pet.getId()),user, pet, false));
-//            return true;
-//        }
-//        return false;
-//    }
 }

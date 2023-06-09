@@ -79,14 +79,9 @@ public class CommonController {
 
             }
 
-            List<Pet> pets = user.getPets();
-            pets.add(pet);
-            user.setPets(pets);
 
+            petitionService.save(new Petition(new PetitionKey(user.getId(),pet.getId()), user, pet, false));
 
-            List<User> users = pet.getUsers();
-            users.add(user);
-            pet.setUsers(users);
             request.setEmail(user.getEmail());
             request.setPhone(user.getPhone());
 //            Boolean flag = petitionService.Petition(user, pet);
@@ -108,7 +103,7 @@ public class CommonController {
     public ResponseEntity<?> getImage (@PathVariable String img){
         if(img!= null && !img.isEmpty()){
             try {
-                Path file = Paths.get(route+ "\\" + img);
+                Path file = Paths.get(route+ "/" + img);
                 byte[] buffer = Files.readAllBytes(file);
                 ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);
                 return  ResponseEntity.ok()
